@@ -14,7 +14,7 @@ import timber.log.Timber
 class MoviePresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IMovieView>() {
 
     private lateinit var movie: Movie
-    private var movieFullInfo: MovieFullInfo? = null
+    var movieFullInfo: MovieFullInfo? = null
 
     fun loadMovieFullInfo() {
         if (movieFullInfo == null) {

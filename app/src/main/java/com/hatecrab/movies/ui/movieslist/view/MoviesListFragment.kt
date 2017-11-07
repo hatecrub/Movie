@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.hatecrab.movies.R
@@ -59,7 +60,7 @@ class MoviesListFragment : BaseFragment(), IMoviesListView {
         val horizontalSpacing = resources.getDimensionPixelSize(R.dimen.horizontal_space_between_cards)
 
         val spanCount = context.resources.getInteger(R.integer.grid_span_size)
-        moviesAdapter = MoviesListAdapter(uiCalculator, { openMovieScreen(it) }, { _, _ -> presenter.loadMore() })
+        moviesAdapter = MoviesListAdapter(uiCalculator, { movie, imageView ->  openMovieScreen(movie, imageView) }, { _, _ -> presenter.loadMore() })
         with(recyclerView) {
             layoutManager = GridLayoutManager(context, spanCount).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -88,7 +89,7 @@ class MoviesListFragment : BaseFragment(), IMoviesListView {
         moviesAdapter.error(errorAdditionalMessage = errorMessage)
     }
 
-    private fun openMovieScreen(movie: Movie) {
-        router.openMovieScreen(movie)
+    private fun openMovieScreen(movie: Movie, imageForTransition: ImageView? = null) {
+        router.openMovieScreen(movie, imageForTransition)
     }
 }

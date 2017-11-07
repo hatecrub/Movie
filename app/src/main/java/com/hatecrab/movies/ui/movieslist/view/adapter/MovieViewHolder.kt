@@ -2,6 +2,7 @@ package com.hatecrab.movies.ui.movieslist.view.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.hatecrab.movies.R
 import com.hatecrab.movies.data.Movie
 import com.hatecrab.movies.ui.common.adapter.DumbViewHolder
@@ -12,11 +13,11 @@ import com.hatecrab.movies.utils.setSize
 import kotlinx.android.synthetic.main.movie_card.*
 
 class MovieViewHolder(view: View) : DumbViewHolder(view) {
-    fun bind(movie: Movie, clickListener: (Movie) -> Unit): MovieViewHolder {
+    fun bind(movie: Movie, clickListener: (Movie, ImageView?) -> Unit): MovieViewHolder {
         title.text = movie.originalTitle
         rating.text = movie.voteAverage.toString()
         logo.loadImage(movie.posterPath)
-        itemView.setOnClickListener { clickListener(movie) }
+        itemView.setOnClickListener { clickListener(movie, logo) }
         return this
     }
 
@@ -29,7 +30,7 @@ class MovieViewHolder(view: View) : DumbViewHolder(view) {
                                 uiCalculator: UiCalculator,
                                 movie: Movie,
                                 isMini: Boolean,
-                                clickListener: (Movie) -> Unit): View =
+                                clickListener: (Movie, ImageView?) -> Unit): View =
                 createViewHolder(parent, uiCalculator, isMini).bind(movie, clickListener).containerView
     }
 }

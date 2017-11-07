@@ -1,11 +1,13 @@
 package com.hatecrab.movies.ui.movie.view
 
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.hatecrab.movies.R
@@ -18,6 +20,7 @@ import com.hatecrab.movies.ui.common.BaseFragment
 import com.hatecrab.movies.ui.movie.presenter.MoviePresenter
 import com.hatecrab.movies.ui.movieslist.view.adapter.MovieViewHolder
 import com.hatecrab.movies.utils.*
+import com.hatecrab.movies.utils.Router.Companion.TRANSITION_NAME
 import kotlinx.android.synthetic.main.movie_fragment.*
 import kotlinx.android.synthetic.main.watch_also_block.*
 import java.text.DecimalFormat
@@ -57,6 +60,10 @@ class MovieFragment : BaseFragment(), IMovieView {
 
         presenter.setMovie(movie)
         presenter.loadMovieFullInfo()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && presenter.movieFullInfo == null) {
+            movieLogo.transitionName = TRANSITION_NAME
+        }
 
         movieBanner.loadImage(movie.backdropPath)
         movieLogo.loadImage(movie.posterPath)
@@ -151,8 +158,11 @@ class MovieFragment : BaseFragment(), IMovieView {
         return builder
     }
 
-    private fun openMovieScreen(movie: Movie) {
-        router.openMovieScreen(movie)
+    private fun openMovieScreen(movie: Movie, imageForTransition: ImageView? = null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            movieLogo.transitionName = null
+        }
+        router.openMovieScreen(movie, imageForTransition)
     }
 
     companion object {

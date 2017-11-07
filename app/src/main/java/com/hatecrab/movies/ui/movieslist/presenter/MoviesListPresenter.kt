@@ -30,6 +30,7 @@ class MoviesListPresenter(private val apiInteractor: ApiInteractor) : MvpPresent
                     paginator.received(it.page)
                     viewState.addMovies(it.results.map { MovieItem(it) })
                 }, {
+                    viewState.showError(null)
                     Timber.e(it)
                 })
     }

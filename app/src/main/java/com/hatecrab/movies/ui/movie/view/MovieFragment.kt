@@ -74,7 +74,7 @@ class MovieFragment : BaseFragment(), IMovieView {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putInt(SCROLL_POSITION, scrollView.scrollY)
+        scrollView?.let { outState?.putInt(SCROLL_POSITION, scrollView.scrollY) }
     }
 
     override fun showProgress() {

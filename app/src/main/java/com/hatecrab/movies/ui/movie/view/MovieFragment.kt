@@ -16,8 +16,10 @@ import com.hatecrab.movies.data.MovieFullInfoResponse
 import com.hatecrab.movies.di.movie.MovieModule
 import com.hatecrab.movies.ui.common.BaseFragment
 import com.hatecrab.movies.ui.movie.presenter.MoviePresenter
+import com.hatecrab.movies.ui.movieslist.view.adapter.MovieViewHolder
 import com.hatecrab.movies.utils.*
 import kotlinx.android.synthetic.main.movie_fragment.*
+import kotlinx.android.synthetic.main.watch_also_block.*
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import javax.inject.Inject
@@ -32,6 +34,12 @@ class MovieFragment : BaseFragment(), IMovieView {
     fun providePresenter(): MoviePresenter {
         return presenter
     }
+
+    @Inject
+    lateinit var uiCalculator: UiCalculator
+
+    @Inject
+    lateinit var router: Router
 
     private val movie by lazy { arguments.getSerializable(MOVIE_ARG) as Movie }
 
@@ -58,6 +66,17 @@ class MovieFragment : BaseFragment(), IMovieView {
         movieRating.text = getString(R.string.movie_rating, movie.voteAverage)
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val scrollY = savedInstanceState?.getInt(SCROLL_POSITION) ?: 0
+        scrollView.scrollTo(0, scrollY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(SCROLL_POSITION, scrollView.scrollY)
+    }
+
     override fun onMovieFullInfoLoaded(movieFullInfoResponse: MovieFullInfoResponse, genres: List<Genre>, similarMovies: List<Movie>) {
         movieBudget.makeVisible()
         movieBudget.text =buildBudget(movieFullInfoResponse.budget)
@@ -70,6 +89,13 @@ class MovieFragment : BaseFragment(), IMovieView {
         if (genres.isNotEmpty()) {
             movieGenres.makeVisible()
             movieGenres.text = buildGenres(genres)
+        }
+
+        flexboxLayout.removeAllViews()
+        similarMovies.subList(0, 4).forEach { movie ->
+            flexboxLayout.addView(
+                    MovieViewHolder.createMediaItemView(flexboxLayout, uiCalculator, movie, true, this::openMovieScreen)
+            )
         }
     }
 
@@ -115,9 +141,14 @@ class MovieFragment : BaseFragment(), IMovieView {
         return builder
     }
 
+    private fun openMovieScreen(movie: Movie) {
+        router.openMovieScreen(movie)
+    }
+
     companion object {
         private const val INFO_SEPARATOR = " / "
         private const val GENRES_SEPARATOR = "  "
+        private const val SCROLL_POSITION = "SCROLL_POSITION"
         private const val MOVIE_ARG = "MOVIE_ARG"
 
         fun newInstance(movie: Movie) = MovieFragment().withArguments(MOVIE_ARG to movie)

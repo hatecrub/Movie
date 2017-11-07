@@ -8,4 +8,5 @@
     <string name="movie_budget">Budget: %s</string>
     <string name="movie_rating">Rating: %.1f</string>
     <string name="adult_film_age_level">18+</string>
+    <string name="watch_also">Watch also:</string>
 </resources>

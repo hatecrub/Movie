@@ -21,8 +21,15 @@ class MovieViewHolder(view: View) : DumbViewHolder(view) {
     }
 
     companion object {
-        fun createViewHolder(parent: ViewGroup, uiCalculator: UiCalculator): MovieViewHolder {
-            return MovieViewHolder(parent.inflate(R.layout.movie_card).apply { setSize(uiCalculator.calculateMediaItemCardSize()) })
+        fun createViewHolder(parent: ViewGroup, uiCalculator: UiCalculator, isMini: Boolean = false): MovieViewHolder {
+            return MovieViewHolder(parent.inflate(R.layout.movie_card).apply { setSize(uiCalculator.calculateMediaItemCardSize(isMini)) })
         }
+
+        fun createMediaItemView(parent: ViewGroup,
+                                uiCalculator: UiCalculator,
+                                movie: Movie,
+                                isMini: Boolean,
+                                clickListener: (Movie) -> Unit): View =
+                createViewHolder(parent, uiCalculator, isMini).bind(movie, clickListener).containerView
     }
 }

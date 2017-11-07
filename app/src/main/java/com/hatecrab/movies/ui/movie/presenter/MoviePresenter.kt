@@ -14,30 +14,34 @@ import timber.log.Timber
 class MoviePresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IMovieView>() {
 
     private lateinit var movie: Movie
+    private var movieFullInfo: MovieFullInfo? = null
 
     fun loadMovieFullInfo() {
-        Observable.zip(
-                apiInteractor.loadMovieFullInfo(movie.id),
-                apiInteractor.loadGenres(),
-                apiInteractor.loadSimilarMovies(movie.id),
-                { movieFullInfoResponse, genreListResponse, similarFilmsResponse ->
-                    MovieFullInfo(movieFullInfoResponse, genreListResponse, similarFilmsResponse)
-                }
-        )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { viewState.showProgress() }
-                .doAfterTerminate { viewState.hideProgress() }
-                .subscribe({
-                    val genres = mutableListOf<Genre>()
-                    val allGenres = it.genresResponse.genres
-                    movie.genreIds.forEach { genreId ->
-                        allGenres.find { it.id == genreId }?.let { genres.add(it) }
+        if (movieFullInfo == null) {
+            Observable.zip(
+                    apiInteractor.loadMovieFullInfo(movie.id),
+                    apiInteractor.loadGenres(),
+                    apiInteractor.loadSimilarMovies(movie.id),
+                    { movieFullInfoResponse, genreListResponse, similarFilmsResponse ->
+                        MovieFullInfo(movieFullInfoResponse, genreListResponse, similarFilmsResponse)
                     }
-                    viewState.onMovieFullInfoLoaded(it.movieFullInfoResponse, genres, it.similarFilmsResponse.results)
-                }, {
-                    Timber.e(it)
-                })
+            )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { viewState.showProgress() }
+                    .doAfterTerminate { viewState.hideProgress() }
+                    .subscribe({
+                        movieFullInfo = it
+                        val genres = mutableListOf<Genre>()
+                        val allGenres = it.genresResponse.genres
+                        movie.genreIds.forEach { genreId ->
+                            allGenres.find { it.id == genreId }?.let { genres.add(it) }
+                        }
+                        viewState.onMovieFullInfoLoaded(it.movieFullInfoResponse, genres, it.similarFilmsResponse.results)
+                    }, {
+                        Timber.e(it)
+                    })
+        }
     }
 
     data class MovieFullInfo(val movieFullInfoResponse: MovieFullInfoResponse, val genresResponse: GenreListResponse,

@@ -86,8 +86,10 @@ class MovieFragment : BaseFragment(), IMovieView {
     }
 
     override fun onMovieFullInfoLoaded(movieFullInfoResponse: MovieFullInfoResponse, genres: List<Genre>, similarMovies: List<Movie>) {
-        movieBudget.makeVisible()
-        movieBudget.text =buildBudget(movieFullInfoResponse.budget)
+        if (movieFullInfoResponse.budget != 0) {
+            movieBudget.makeVisible()
+            movieBudget.text = buildBudget(movieFullInfoResponse.budget)
+        }
 
         if (movieFullInfoResponse.productionCountries.isNotEmpty()) {
             movieInfo.makeVisible()
@@ -108,7 +110,7 @@ class MovieFragment : BaseFragment(), IMovieView {
     }
 
     private fun buildBudget(budget: Int): String {
-        val symbols  = DecimalFormatSymbols()
+        val symbols = DecimalFormatSymbols()
         symbols.decimalSeparator = ' '
         val decimalFormat = DecimalFormat("$###,###,###,###", symbols)
         return getString(R.string.movie_budget, decimalFormat.format(budget))
@@ -136,7 +138,7 @@ class MovieFragment : BaseFragment(), IMovieView {
         return builder
     }
 
-    private fun buildGenres(genres: List<Genre>) : SpannableStringBuilder {
+    private fun buildGenres(genres: List<Genre>): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
         genres.forEach {
             builder.append(it.name)

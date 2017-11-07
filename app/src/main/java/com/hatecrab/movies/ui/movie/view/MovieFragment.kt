@@ -77,6 +77,14 @@ class MovieFragment : BaseFragment(), IMovieView {
         outState?.putInt(SCROLL_POSITION, scrollView.scrollY)
     }
 
+    override fun showProgress() {
+        progressBar.makeVisible()
+    }
+
+    override fun hideProgress() {
+        progressBar.makeGone()
+    }
+
     override fun onMovieFullInfoLoaded(movieFullInfoResponse: MovieFullInfoResponse, genres: List<Genre>, similarMovies: List<Movie>) {
         movieBudget.makeVisible()
         movieBudget.text =buildBudget(movieFullInfoResponse.budget)

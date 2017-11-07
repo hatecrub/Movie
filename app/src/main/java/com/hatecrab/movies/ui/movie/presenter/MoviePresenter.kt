@@ -26,6 +26,8 @@ class MoviePresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IM
         )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { viewState.showProgress() }
+                .doAfterTerminate { viewState.hideProgress() }
                 .subscribe({
                     val genres = mutableListOf<Genre>()
                     val allGenres = it.genresResponse.genres

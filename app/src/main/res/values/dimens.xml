@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="banner_height">200dp</dimen>
+    <dimen name="movie_card_width">156dp</dimen>
+    <dimen name="movie_card_height">282dp</dimen>
+    <dimen name="movie_card_width_mini">104dp</dimen>
+    <dimen name="movie_card_height_mini">188dp</dimen>
+
+    <dimen name="horizontal_space_between_cards">8dp</dimen>
+    <dimen name="vertical_space_between_cards">12dp</dimen>
+    <dimen name="recycler_horizontal_padding">16dp</dimen>
+</resources>

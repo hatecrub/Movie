@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dark_jungle_green">#1E2529</color>
+    <color name="dark_jungle_green3">#191D22</color>
+    <color name="rich_electric_blue">#00A9E6</color>
+    <color name="card_view_image_background">#80000000</color>
+    <color name="card_view_image_background_error">#000000</color>
+
+    <color name="white_5">#0dffffff</color>
+    <color name="white_10">#1affffff</color>
+    <color name="white_15">#27ffffff</color>
+    <color name="white_20">#32ffffff</color>
+    <color name="white_30">#4dffffff</color>
+    <color name="white_40">#66ffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="white_70">#B3ffffff</color>
+    <color name="white_87">#deffffff</color>
+
+    <color name="black_20">#32000000</color>
+    <color name="black_30">#4d000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_70">#B3000000</color>
+    <color name="black_80">#F2000000</color>
+    <color name="black_90">#E6000000</color>
+    <color name="black">#000000</color>
+</resources>

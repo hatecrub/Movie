@@ -3,6 +3,7 @@ package com.hatecrab.movies.ui.movieslist.presenter
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.hatecrab.movies.interactors.ApiInteractor
+import com.hatecrab.movies.ui.common.BasePresenter
 import com.hatecrab.movies.ui.common.items.MovieItem
 import com.hatecrab.movies.ui.movieslist.view.IMoviesListView
 import com.hatecrab.movies.utils.Paginator
@@ -11,7 +12,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 
 @InjectViewState
-class MoviesListPresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IMoviesListView>() {
+class MoviesListPresenter(private val apiInteractor: ApiInteractor) : BasePresenter<IMoviesListView>() {
 
     private val paginator: Paginator = Paginator { offset -> loadMovies(offset) }
 
@@ -32,7 +33,7 @@ class MoviesListPresenter(private val apiInteractor: ApiInteractor) : MvpPresent
                 }, {
                     viewState.showError(null)
                     Timber.e(it)
-                })
+                }).unsubscribeOnDestroy()
     }
 
     fun loadMore() {

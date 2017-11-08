@@ -4,6 +4,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.hatecrab.movies.data.*
 import com.hatecrab.movies.interactors.ApiInteractor
+import com.hatecrab.movies.ui.common.BasePresenter
 import com.hatecrab.movies.ui.movie.view.IMovieView
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -11,7 +12,7 @@ import rx.schedulers.Schedulers
 import timber.log.Timber
 
 @InjectViewState
-class MoviePresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IMovieView>() {
+class MoviePresenter(private val apiInteractor: ApiInteractor) : BasePresenter<IMovieView>() {
 
     private lateinit var movie: Movie
     var movieFullInfo: MovieFullInfo? = null
@@ -40,7 +41,7 @@ class MoviePresenter(private val apiInteractor: ApiInteractor) : MvpPresenter<IM
                         viewState.onMovieFullInfoLoaded(it.movieFullInfoResponse, genres, it.similarFilmsResponse.results)
                     }, {
                         Timber.e(it)
-                    })
+                    }).unsubscribeOnDestroy()
         }
     }
 
